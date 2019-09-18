@@ -18,15 +18,13 @@ class AuthController extends Controller
 
         if ($validator->fails())
         {
-            return response(['errors'=>$validator->errors()->all()], 422);
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
 
         $request['password']=Hash::make($request['password']);
         $user = User::create($request->toArray());
         $token = $user->createToken('User Access Token')->accessToken;
-        $response = ['token' => $token];
-
-        return response($response, 200);
+        return response()->json(['token' => $token],200);
     }
 
     public function signIn (Request $request) {
@@ -37,7 +35,7 @@ class AuthController extends Controller
         ]);
         if ($validator->fails())
         {
-            return response(['errors'=>$validator->errors()->all()], 422);
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -46,7 +44,7 @@ class AuthController extends Controller
 
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('User Access Token')->accessToken;
-                return response()->json(['token' => $token]);
+                return response()->json(['token' => $token],200);
             } else {
                 return response()->json(['message' => 'Wrong password'], 422);
             }
@@ -55,5 +53,16 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+    }
+
+    public function logout (Request $request) {
+        $token = $request->user()->token();
+        $token->revoke();
+        $message = 'You have been succesfully logged out!';
+        return response()->json(['message' => $message],200);
+    }
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
     }
 }
