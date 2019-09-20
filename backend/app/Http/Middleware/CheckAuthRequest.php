@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
+use Response;
 class CheckAuthRequest
 {
     /**
@@ -15,7 +15,10 @@ class CheckAuthRequest
      */
     public function handle($request, Closure $next)
     {
-        $request->headers->set('Accept', 'application/json');
+
+        if($request->header('Accept') != 'application/json'){
+            return Response::json(array('error'=>'wrong accept header'));
+        }
         return $next($request);
     }
 }
