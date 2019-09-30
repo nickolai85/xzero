@@ -49,11 +49,8 @@ export default class App extends Component {
     return axios
       .get("http://localhost:10077/api/user",data)
       .then(response => {
-        const loggedIn = response.data.loggedIn;
-        console.log(response);
+        const status = response.data.statusText;
         const loggedInStatus = this.state.loggedInStatus;
-        console.log('loggedIn',loggedIn);
-        console.log('loggedInStatus', loggedInStatus)
         if (loggedIn && loggedInStatus === "LOGGED_IN") {
           console.log('cond1');
           return loggedIn;
@@ -76,6 +73,7 @@ export default class App extends Component {
       });
   }
   componentDidMount() {
+
     this.checkLoginStatus();
   }
   render() {

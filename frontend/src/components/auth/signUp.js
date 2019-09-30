@@ -36,16 +36,12 @@ handleSubmit(event){
   axios.post(API_URL+"api/signup",data,header)
     .then(response =>{
       localStorage.setItem('token', response.data.token)
-  
+ 
     })
     .catch(error =>{
       console.log(error);
     }
     )
-
-
-  console.log(data);
-  console.log(API_URL);
   event.preventDefault();
 }
 
@@ -87,7 +83,7 @@ handleSubmit(event){
           onChange={this.handleChange}
         />
         <button className="btn" type="submit">
-            Login
+            Signup
         </button>
       </form>
     </div>

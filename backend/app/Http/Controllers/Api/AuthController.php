@@ -24,8 +24,9 @@ class AuthController extends Controller
 
         $request['password']=Hash::make($request['password']);
         $user = User::create($request->toArray());
-        $token = $user->createToken('User Access Token')->accessToken;
-        return response()->json(['token' => $token],200);
+        $rs['token'] = $user->createToken('User Access Token')->accessToken;
+        $rs['logged_in'] = 'LOGGED_IN';
+        return response()->json($rs,200);
     }
 
     public function signIn (Request $request) {
@@ -44,8 +45,9 @@ class AuthController extends Controller
         if ($user) {
 
             if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('User Access Token')->accessToken;
-                return response()->json(['token' => $token],200);
+                $rs['token']  = $user->createToken('User Access Token')->accessToken;
+                $rs['logged_in'] = 'LOGGED_IN';
+                return response()->json($rs,200);
             } else {
                 return response()->json(['message' => 'Wrong password'], 422);
             }
@@ -64,6 +66,10 @@ class AuthController extends Controller
     }
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        if ($request->user()){
+            $rs['logged_in'] = 'LOGGED_IN';
+            $rs['user'] =  $request->user();
+        }
+        return response()->json($rs,200);
     }
 }
