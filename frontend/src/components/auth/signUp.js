@@ -12,6 +12,17 @@ export default class SignUp extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
+    this.handleUnsuccessfulAuth = this.handleUnsuccessfulAuth.bind(this);
+  }
+
+  handleSuccessfulAuth() {
+    this.props.handleSuccessfulLogin();
+    this.props.history.push("/");
+  }
+
+  handleUnsuccessfulAuth() {
+    this.props.handleUnsuccessfulLogin();
   }
   handleChange(event) {
     this.setState({
@@ -35,7 +46,15 @@ handleSubmit(event){
   
   axios.post(API_URL+"api/signup",data,header)
     .then(response =>{
-      localStorage.setItem('token', response.data.token)
+      if(response.data.token !=''){
+        localStorage.setItem('token', response.data.token);
+        this.handleSuccessfulAuth();
+      } else{
+        this.setState({
+           errorText: "Wrong email or password"
+        });
+        this.props.handleUnsuccessfulAuth();
+      }
  
     })
     .catch(error =>{

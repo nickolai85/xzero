@@ -10,7 +10,19 @@ export default class SignIn extends Component {
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
+    this.handleUnsuccessfulAuth = this.handleUnsuccessfulAuth.bind(this);
   }
+  handleSuccessfulAuth() {
+    this.props.handleSuccessfulLogin();
+    this.props.history.push("/");
+  }
+
+  handleUnsuccessfulAuth() {
+    this.props.handleUnsuccessfulLogin();
+  }
+
+
   handleChange(event) {
     this.setState({
         [event.target.name]: event.target.value,
@@ -18,7 +30,7 @@ export default class SignIn extends Component {
     });
   }
   handleSubmit(event){
-  
+
     let data = {
       email: this.state.email,
       password: this.state.password,
@@ -28,12 +40,18 @@ export default class SignIn extends Component {
         Accept: 'application/json',
       }
     }
-    
+
     axios.post(API_URL+"api/signin",data,header)
       .then(response =>{
-      
-        localStorage.setItem('token', response.data.token)
-   
+        if(response.data.token !=''){
+          localStorage.setItem('token', response.data.token);
+          this.handleSuccessfulAuth();
+        } else{
+          this.setState({
+            errorText: "Wrong email or password"
+          });
+          this.props.handleUnsuccessfulAuth();
+        }
       })
       .catch(error =>{
         console.log('error',error);

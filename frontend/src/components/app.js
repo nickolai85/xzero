@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import WelcomeComponent from './pages/welcome';
+import Auth from './pages/auth';
 import axios from "axios";
 import Home from './pages/home';
 import SignIn from './auth/signIn';
@@ -14,7 +14,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedInStatus: "NOT_LOGGED_IN",
+      loggedInStatus: false,
+      back_response: false,
       userdata:""
     };
 
@@ -22,26 +23,7 @@ export default class App extends Component {
     this.handleUnsuccessfulLogin = this.handleUnsuccessfulLogin.bind(this);
     this.handleSuccessfulLogout = this.handleSuccessfulLogout.bind(this)
   }
-  handleSuccessfulLogin() {
-    this.setState({
-      loggedInStatus: "LOGGED_IN"
-    });
-  }
-
-  handleSuccessfulLogout() {
-    this.setState({
-      loggedInStatus: "NOT_LOGGED_IN"
-    });
-  }
-
-  handleUnsuccessfulLogin() {
-    this.setState({
-      loggedInStatus: "NOT_LOGGED_IN"
-    });
-  }
-  checkLoginStatus() {
-    
-    let token = localStorage.getItem('token');
+   checkLoginStatus(token) {
     let data = {headers: {
         Accept:'application/json',
         Authorization:`Bearer ${token}`
@@ -49,48 +31,89 @@ export default class App extends Component {
     return axios
       .get("http://localhost:10077/api/user",data)
       .then(response => {
-        const status = response.data.statusText;
-        const loggedInStatus = this.state.loggedInStatus;
-        if (loggedIn && loggedInStatus === "LOGGED_IN") {
-          console.log('cond1');
-          return loggedIn;
-        } else if (loggedIn && loggedInStatus === "NOT_LOGGED_IN") {
-          console.log('cond2');
+
+        if(response.data.logged_in === "LOGGED_IN"){
           this.setState({
-            loggedInStatus: "LOGGED_IN",
-            userdata: response.data
-          });
-        } else if (!loggedIn && loggedInStatus === "LOGGED_IN") {
-          console.log('cond3');
-          this.setState({
-            loggedInStatus: "NOT_LOGGED_IN",
-            userdata:''
+            loggedInStatus: true,
+            back_response: 'ok'
           });
         }
       })
       .catch(error => {
         console.log("Error", error);
+        this.setState({
+          back_response: 'error'
+        });
       });
   }
-  componentDidMount() {
 
-    this.checkLoginStatus();
+
+  handleSuccessfulLogin() {
+    console.log('worked');
+    this.setState({
+      loggedInStatus: true
+    });
   }
+
+  handleSuccessfulLogout() {
+    this.setState({
+      loggedInStatus: false
+    });
+  }
+
+  handleUnsuccessfulLogin() {
+    this.setState({
+      loggedInStatus: false
+    });
+  };
+
+  componentDidMount() {
+    let token =  localStorage.getItem('token');
+      if(token){
+        this.checkLoginStatus(token);
+       }
+    }
   render() {
-    return (
+    if(this.state.back_response){
+     return (
       <div className='app'>
-        <WelcomeComponent />
         <Router>
          <div>
            <Switch>
-             <Route exact path = "/" component={Home} />
-             <Route path = "/signin" component={SignIn} />
-             <Route path = "/signup" component={SignUp} />
+             <Route exact path = "/"
+                  render={props => (
+                    <Home
+                      {...props}
+                      loggedInStatus={this.state.loggedInStatus}
+                  />
+                )}   
+             />
+             <Route path = "/signin" 
+              render={props => (
+                    <SignIn
+                      {...props}
+                      handleSuccessfulLogin={this.handleSuccessfulLogin}
+                      handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+                  />
+                )} />
+             <Route 
+                render={props => (
+                    <SignUp
+                      {...props}
+                      handleSuccessfulLogin={this.handleSuccessfulLogin}
+                      handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+                  /> )} />
            </Switch>
          </div>
        </Router>
 
       </div>
     );
+    }
+    else{
+      return(
+          <div> Loader</div>
+      );
+    }
   }
 }

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-
+import Chat from './chat';
+import Auth from './auth';
 export default class Home extends Component {
+
    render() {
      return (
        <div>
-           <h2>Home</h2>
+           {this.props.loggedInStatus ? <Chat/> : <Auth/>}
        </div>
      );
    }
