@@ -85,6 +85,7 @@ export default class App extends Component {
                     <Home
                       {...props}
                       loggedInStatus={this.state.loggedInStatus}
+                      handleSuccessfulLogout={this.handleSuccessfulLogout}
                   />
                 )}   
              />
