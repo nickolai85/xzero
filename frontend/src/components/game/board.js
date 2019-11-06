@@ -74,16 +74,43 @@ export default class Board extends Component {
       const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[this.state.stepNumber];
       const winner =  this.calculateWinner(current.squares);
-      const moves = history.map((step, move) => {
-        const desc = move ?
-          'Go to move #' + move :
-          'Go to game start';
-        return (
-          <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
-          </li>
+      console.log('length',history.length);
+
+      const moves = (history)=>{
+        
+        const moveNumber = history.length-1;
+        const last_move = this.state.history.length;
+        const current = history[this.state.stepNumber];
+        const jumPback =  moveNumber!= 0 ? moveNumber - 1 : 0;
+        const jumForward =  last_move >= current ? moveNumber + 1 : 0;
+        const display_back = jumPback !=0 ? 'block': 'none';
+        const display_forward = jumForward !=0 ? 'block': 'none';
+        
+
+        return(
+            <div>
+                <div>
+                   Move {moveNumber}
+                </div>
+                
+                <div  style = {{display: display_back}}><button onClick={() => this.jumpTo(jumPback)}>{'<- Back'}</button></div>
+                <div><button onClick={() => this.jumpTo(0)}>{'Game start'}</button></div>
+                <div style  =  {{display: display_forward}}><button onClick={() => this.jumpTo(jumForward)}>{'Forward ->'}</button></div>
+            </div>
         );
-      });
+      };
+
+     // const moves = history.map((step, move) => {
+     //   console.log(move);
+     //   const desc = move ?
+     //     'Go to move #' + move :
+     //     'Go to game start';
+      //  return (
+      //    <li key={move}>
+      //      <button onClick={() => this.jumpTo(move)}>{desc}</button>
+      ///    </li>
+      //  );
+     // });
 
       let status;
       if (winner) {
@@ -95,12 +122,8 @@ export default class Board extends Component {
         return (
           <div>
             <div className="status">{status}</div>
-            <ol>{moves}</ol>
-            <div>
-                <div>{'<- Back'}</div>
-                <div>{'New game'}</div>
-                <div>{'Forward ->'}</div>
-            </div>
+            <ol>{moves(history)}</ol>
+
             <div className="board-row">
               {this.renderSquare(0)}
               {this.renderSquare(1)}
