@@ -80,11 +80,6 @@ export default class Board extends Component {
         
         const moveNumber = history.length-1;
         const last_move = this.state.history.length;
-        console.log('current',this.state.stepNumber);
-        console.log('last_move',last_move);
-        console.log('moveNumber',moveNumber);
-        console.log('history.length',history.length);
-
         const jumPback =  moveNumber!= 0 ? moveNumber - 1 : 0;
         const jumForward =  history.length >= last_move ? 0 : moveNumber + 1;
         const display_back = jumPback !=0 ? 'block': 'none';
@@ -122,6 +117,8 @@ export default class Board extends Component {
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       }
+
+      
     console.log(this.state.squares);
         return (
           <div>
