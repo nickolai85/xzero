@@ -74,15 +74,19 @@ export default class Board extends Component {
       const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[this.state.stepNumber];
       const winner =  this.calculateWinner(current.squares);
-      console.log('length',history.length);
+     // console.log('length',history.length);
 
       const moves = (history)=>{
         
         const moveNumber = history.length-1;
         const last_move = this.state.history.length;
-        const current = history[this.state.stepNumber];
+        console.log('current',this.state.stepNumber);
+        console.log('last_move',last_move);
+        console.log('moveNumber',moveNumber);
+        console.log('history.length',history.length);
+
         const jumPback =  moveNumber!= 0 ? moveNumber - 1 : 0;
-        const jumForward =  last_move >= current ? moveNumber + 1 : 0;
+        const jumForward =  history.length >= last_move ? 0 : moveNumber + 1;
         const display_back = jumPback !=0 ? 'block': 'none';
         const display_forward = jumForward !=0 ? 'block': 'none';
         
