@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Square from './square';
-
+import BoardFooter from './boardFooter';
 export default class Board extends Component {
     constructor(props) {
         super(props);
@@ -9,11 +9,24 @@ export default class Board extends Component {
             squares: Array(9).fill(null)
           }],
           stepNumber: 0,
-          xIsNext: true
+          xIsNext: true,
+          player:{
+              piece: 'X',
+          },
+          opponent:{
+              piece: '0',
+          }
         };
         this.calculateWinner = this.calculateWinner.bind(this);
-        this.jumpTo = this.jumpTo.bind(this);
+        this.playerPieces = this.playerPieces.bind(this);
       }
+
+      playerPieces(piece){
+          this.setState({
+              player: piece.playerPiece,
+              opponent: piece.oponentPiece
+          });
+      } 
       jumpTo(step) {
         this.setState({
           stepNumber: step,
@@ -24,10 +37,13 @@ export default class Board extends Component {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
         const squares = current.squares.slice();
+        const player_piece = this.state.player.piece;
+        const opponent_piece = this.state.opponent.piece;
+        console.log(opponent_piece);
         if (this.calculateWinner(squares) || squares[i]) {
           return;
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = this.state.xIsNext ? player_piece : opponent_piece;
         this.setState({
           history: history.concat([{
             squares: squares
@@ -62,7 +78,6 @@ export default class Board extends Component {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
         return (
-          
           <Square
             value={current.squares[i]}
             onClick={() => this.handleClick(i)}
@@ -77,7 +92,6 @@ export default class Board extends Component {
      // console.log('length',history.length);
 
       const moves = (history)=>{
-        
         const moveNumber = history.length-1;
         const last_move = this.state.history.length;
         const jumPback =  moveNumber!= 0 ? moveNumber - 1 : 0;
@@ -98,18 +112,6 @@ export default class Board extends Component {
             </div>
         );
       };
-
-     // const moves = history.map((step, move) => {
-     //   console.log(move);
-     //   const desc = move ?
-     //     'Go to move #' + move :
-     //     'Go to game start';
-      //  return (
-      //    <li key={move}>
-      //      <button onClick={() => this.jumpTo(move)}>{desc}</button>
-      ///    </li>
-      //  );
-     // });
 
       let status;
       if (winner) {
@@ -139,6 +141,12 @@ export default class Board extends Component {
               {this.renderSquare(6)}
               {this.renderSquare(7)}
               {this.renderSquare(8)}
+            </div>
+
+            <div className="game-info">
+              <BoardFooter 
+                  playerPieces = {this.playerPieces}
+              />
             </div>
           </div>
         );
