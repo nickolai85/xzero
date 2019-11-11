@@ -22,10 +22,18 @@ export default class Board extends Component {
       }
 
       playerPieces(piece){
+        const playerPiece = piece.playerPiece;
+        const oponentPiece = piece.oponentPiece; 
           this.setState({
-              player: piece.playerPiece,
-              opponent: piece.oponentPiece
+            player:{
+              piece: playerPiece,
+          },
+          opponent:{
+              piece: oponentPiece,
+          }
           });
+          console.log('piece',piece.playerPiece)
+          console.log('playerPieces', this.state.opponent.piece);
       } 
       jumpTo(step) {
         this.setState({
@@ -39,7 +47,7 @@ export default class Board extends Component {
         const squares = current.squares.slice();
         const player_piece = this.state.player.piece;
         const opponent_piece = this.state.opponent.piece;
-        console.log(opponent_piece);
+        console.log('opponent_piece',opponent_piece);
         if (this.calculateWinner(squares) || squares[i]) {
           return;
         }
