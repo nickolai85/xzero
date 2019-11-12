@@ -14,24 +14,32 @@ export default class BoardFooter extends Component {
         }
      choosePiece(){
           console.log('choosePiece');
+          let player_piece = '';
+          let opponent_piece = '';
+
           if(this.state.pieces.playerPiece === 'X'){
-               this.setState({
-                    pieces:{
-                         playerPiece: '0',
-                         oponentPiece: 'X'
-                    }
-               });
+                player_piece = '0';
+                opponent_piece = 'X';
           }
           else{
-               this.setState({
-                    pieces:{
-                         playerPiece: 'X',
-                         oponentPiece: '0'
-                    }
-               });
+               player_piece = 'X';
+               opponent_piece = '0';
           }
-          this.props.playerPieces(this.state.pieces);
+
+          this.setState({
+               pieces:{
+                    playerPiece: player_piece,
+                    oponentPiece: opponent_piece
+               }
+          });
+
+          this.props.playerPieces(
+               { pieces:{
+               playerPiece: player_piece,
+               oponentPiece: opponent_piece
+          }});
      }
+
    render() {
      return (
        <div>

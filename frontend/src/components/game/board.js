@@ -15,15 +15,17 @@ export default class Board extends Component {
           },
           opponent:{
               piece: '0',
-          }
-        };
+          },
+        };    
         this.calculateWinner = this.calculateWinner.bind(this);
         this.playerPieces = this.playerPieces.bind(this);
-      }
+        this.opponent_move = this.opponent_move.bind(this);  
+    }
 
-      playerPieces(piece){
-        const playerPiece = piece.playerPiece;
-        const oponentPiece = piece.oponentPiece; 
+    playerPieces(piece){
+      console.log('piece',piece);
+        const playerPiece = piece.pieces.playerPiece;
+        const oponentPiece = piece.pieces.oponentPiece; 
           this.setState({
             player:{
               piece: playerPiece,
@@ -32,22 +34,23 @@ export default class Board extends Component {
               piece: oponentPiece,
           }
           });
-          console.log('piece',piece.playerPiece)
-          console.log('playerPieces', this.state.opponent.piece);
-      } 
-      jumpTo(step) {
+          if(playerPiece != 'X'){
+            this.opponent_move();
+          }
+      }
+    jumpTo(step) {
         this.setState({
           stepNumber: step,
           xIsNext: (step % 2) === 0,
         });
-      }
-      handleClick(i) {
+    }
+
+    handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
         const squares = current.squares.slice();
         const player_piece = this.state.player.piece;
         const opponent_piece = this.state.opponent.piece;
-        console.log('opponent_piece',opponent_piece);
         if (this.calculateWinner(squares) || squares[i]) {
           return;
         }
@@ -59,9 +62,18 @@ export default class Board extends Component {
           stepNumber: history.length,
           xIsNext: !this.state.xIsNext,
         });
-      }
+    }
 
-      calculateWinner(squares) {
+    opponent_move(){
+      console.log('opponent_move')
+      const current = this.state.history[0].squares;
+      console.log('current',current);
+      let empty_ceils = []
+      current.forEach(element => {
+        console.log('element', current[element]);
+      });
+    }
+    calculateWinner(squares) {
         const lines = [
           [0, 1, 2],
           [3, 4, 5],
@@ -79,10 +91,8 @@ export default class Board extends Component {
           }
         }
         return null;
-      }
-
-
-      renderSquare(i) {
+    }
+    renderSquare(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
         return (
@@ -91,23 +101,23 @@ export default class Board extends Component {
             onClick={() => this.handleClick(i)}
           />
         );
-      }
+    }
+
 
     render() {
+      console.log('board_state', this.state);
+
       const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[this.state.stepNumber];
       const winner =  this.calculateWinner(current.squares);
-     // console.log('length',history.length);
 
-      const moves = (history)=>{
+        const moves = (history)=>{
         const moveNumber = history.length-1;
         const last_move = this.state.history.length;
         const jumPback =  moveNumber!= 0 ? moveNumber - 1 : 0;
         const jumForward =  history.length >= last_move ? 0 : moveNumber + 1;
         const display_back = jumPback !=0 ? 'block': 'none';
         const display_forward = jumForward !=0 ? 'block': 'none';
-        
-
         return(
             <div>
                 <div>
@@ -127,10 +137,7 @@ export default class Board extends Component {
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       }
-
-      
-    console.log(this.state.squares);
-        return (
+      return (
           <div>
             <div className="status">{status}</div>
             <ol>{moves(history)}</ol>
@@ -158,5 +165,5 @@ export default class Board extends Component {
             </div>
           </div>
         );
-      }
+    }
 }
