@@ -13,7 +13,6 @@ export default class BoardFooter extends Component {
           this.choosePiece = this.choosePiece.bind(this);
         }
      choosePiece(){
-          console.log('choosePiece');
           let player_piece = '';
           let opponent_piece = '';
 
@@ -43,14 +42,19 @@ export default class BoardFooter extends Component {
    render() {
      return (
        <div>
-           <div className="players">
+           <div className="players_wrapper">
                 <h3 className="player_1">Player 1 <span onClick={() => this.choosePiece()} >({this.state.pieces.playerPiece})</span></h3>
                 <h3 className="player_2">Player 2 <span>({this.state.pieces.oponentPiece})</span></h3>
            </div>
-
-           <div className="score">
-                <h3 className="score_1"> Score 1 (2) </h3>
-                <h3 className="score_2"> Score (1) </h3>
+          <div className="score_wrapper">
+               <h3 className="score">
+                  Round : {this.props.round}
+               </h3>
+          </div>
+           <div className="score_wrapper">
+                <h3 className="score_1"> Score 1 ({this.props.playerScore}) </h3>
+                <h3 className="tie">Tie {this.props.tie}</h3>
+                <h3 className="score_2"> Score 2 ({this.props.opponentScore}) </h3>
            </div>
        </div>
      );

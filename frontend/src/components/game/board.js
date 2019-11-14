@@ -12,20 +12,36 @@ export default class Board extends Component {
           xIsNext: true,
           player:{
               piece: 'X',
+              score: 0,
           },
           opponent:{
               piece: '0',
+              score: 0,
           },
-        };    
+          round: 1,
+          roundStatus: 'game',
+          tie:0,
+          gameVs:'pc'
+        };
         this.calculateWinner = this.calculateWinner.bind(this);
         this.playerPieces = this.playerPieces.bind(this);
         this.opponent_move = this.opponent_move.bind(this);  
-    }
+        this.move = this.move.bind(this);
+        this.handleVsPc = this.handleVsPc.bind(this);
+        this.handleVsPlayer = this.handleVsPlayer.bind(this);
+        this.handleVsOnlinePlayer = this.handleVsOnlinePlayer.bind(this);
+        this.clearHistory = this.clearHistory.bind(this);
+        this.newRound = this.newRound.bind(this);
 
+    }
     playerPieces(piece){
       console.log('piece',piece);
+        this.clearHistory();
+
         const playerPiece = piece.pieces.playerPiece;
         const oponentPiece = piece.pieces.oponentPiece; 
+        console.log('playerPiece',playerPiece);
+        console.log('oponentPiece',oponentPiece);
           this.setState({
             player:{
               piece: playerPiece,
@@ -34,9 +50,10 @@ export default class Board extends Component {
               piece: oponentPiece,
           }
           });
+
           if(playerPiece != 'X'){
-            this.opponent_move();
-          }
+            this.opponent_move(oponentPiece);
+          }              
       }
     jumpTo(step) {
         this.setState({
@@ -44,34 +61,121 @@ export default class Board extends Component {
           xIsNext: (step % 2) === 0,
         });
     }
+    newRound(){
+      let player_piece = '';
+      let opponent_piece = '';
 
-    handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[this.state.stepNumber];
-        const squares = current.squares.slice();
-        const player_piece = this.state.player.piece;
-        const opponent_piece = this.state.opponent.piece;
-        if (this.calculateWinner(squares) || squares[i]) {
-          return;
-        }
-        squares[i] = this.state.xIsNext ? player_piece : opponent_piece;
-        this.setState({
-          history: history.concat([{
-            squares: squares
-          }]),
-          stepNumber: history.length,
-          xIsNext: !this.state.xIsNext,
-        });
+      if(this.state.player.piece === 'X'){
+            player_piece = '0';
+            opponent_piece = 'X';
+      }
+      else{
+           player_piece = 'X';
+           opponent_piece = '0';
+      }
+      this.setState({
+        roundStatus: 'game',
+      })
+      this.playerPieces(
+           { pieces:{
+           playerPiece: player_piece,
+           oponentPiece: opponent_piece
+      }});
+      
     }
 
-    opponent_move(){
-      console.log('opponent_move')
-      const current = this.state.history[0].squares;
-      console.log('current',current);
-      let empty_ceils = []
-      current.forEach(element => {
-        console.log('element', current[element]);
+    clearHistory(){
+      const step = 0;
+      this.setState({
+        history: [{
+          squares: Array(9).fill(null)
+        }],
+        stepNumber: step,
+        xIsNext: (step % 2) === 0,
       });
+    }
+    
+
+    move(i,piece){
+      const history = this.state.history.slice(0, this.state.stepNumber + 1);
+      const current = history[this.state.stepNumber];
+      const squares = current.squares.slice();
+      if (this.calculateWinner(squares) || squares[i]) {
+        console.log('this.calculateWinner(squares)',this.calculateWinner(squares));
+        
+        let playerScore = this.state.player.score;
+        let opponentScore = this.state.opponent.score;
+        let gameRound = this.state.round;
+      
+        if(this.calculateWinner(squares) === this.state.player.piece){
+          playerScore +=1;
+        }
+        if(this.calculateWinner(squares) === this.state.opponent.piece){
+          opponentScore +=1;
+        }
+          gameRound +=1;
+
+          let gameTie = gameRound - (playerScore + opponentScore);
+        this.setState({
+          player:{
+            score: playerScore
+          },
+          opponent:{
+            score: opponentScore
+          },
+          round: gameRound,
+          tie: gameTie,
+          roundStatus: 'end',
+        })
+        return;
+      }
+      squares[i] = piece;
+      this.setState({
+        history: history.concat([{
+          squares: squares
+        }]),
+        stepNumber: history.length,
+        xIsNext: !this.state.xIsNext,
+      });
+    }
+
+    handleClick(i) {
+
+      if(this.state.roundStatus !='end'){
+          const playerPiece = this.state.player.piece;
+          const oponentPiece = this.state.opponent.piece;
+          this.move(i,playerPiece);
+          this.opponent_move(oponentPiece);
+      }else{
+        this.newRound();
+      }
+
+    }
+    pcMove(){
+
+    }
+    nextPlayerMove(){
+
+    }
+    onlineMove(){
+
+    }
+
+    opponent_move(oponentPiece){
+      setTimeout(() => {
+        const moveNumber = this.state.history.length-1;
+        const current = this.state.history[moveNumber].squares;
+      
+        let empty_ceils = []
+        for (var j = 0; j < current.length; j++) {
+          if(current[j] === null){
+            empty_ceils.push(j);
+          }
+        }
+        let i = empty_ceils[Math.floor(Math.random() * empty_ceils.length)];
+        const piece = oponentPiece;
+        this.move(i,piece);
+      },500)
     }
     calculateWinner(squares) {
         const lines = [
@@ -92,6 +196,19 @@ export default class Board extends Component {
         }
         return null;
     }
+    handleVsPc() {
+      if (this.state.gameVs != 'pc')
+        this.setState({gameVs: 'pc'});
+    }
+    handleVsPlayer() {
+      if (this.state.gameVs != 'player') 
+        this.setState({gameVs: 'player'});
+    }
+    handleVsOnlinePlayer() {
+      if (this.state.gameVs != 'online') 
+        this.setState({gameVs: 'online'});
+    }
+
     renderSquare(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
@@ -102,15 +219,11 @@ export default class Board extends Component {
           />
         );
     }
-
-
     render() {
-      console.log('board_state', this.state);
-
-      const history = this.state.history.slice(0, this.state.stepNumber + 1);
-      const current = history[this.state.stepNumber];
-      const winner =  this.calculateWinner(current.squares);
-
+      console.log('this.state',this.state);
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[this.state.stepNumber];
+        const winner =  this.calculateWinner(current.squares);
         const moves = (history)=>{
         const moveNumber = history.length-1;
         const last_move = this.state.history.length;
@@ -160,8 +273,23 @@ export default class Board extends Component {
 
             <div className="game-info">
               <BoardFooter 
+                  playerScore  = {this.state.player.score}
+                  opponentScore = {this.state.opponent.score}
+                  tie = {this.state.tie}
+                  round = {this.state.round}
                   playerPieces = {this.playerPieces}
               />
+            </div>
+            <div className="game-vs">
+                <div className={this.state.gameVs === 'pc' ? "active-pc-button" : "deactived-pc-button"} 
+                    onClick={this.handleVsPc}> PC
+                </div>
+                <div className={this.state.gameVs === 'player'  ? "active-player-button" : "deactived-player-button"} 
+                    onClick={this.handleVsPlayer}> Player
+                </div>
+                <div className={this.state.gameVs === 'online' ? "active-online-button" : "deactived-online-button"} 
+                    onClick={this.handleVsOnlinePlayer}> Online  player
+                </div>
             </div>
           </div>
         );
