@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Square from './square';
 import BoardFooter from './boardFooter';
+import Connect from './connect';
 export default class Board extends Component {
     constructor(props) {
         super(props);
@@ -22,19 +23,17 @@ export default class Board extends Component {
           roundStatus: 'game',
           tie:0,
           gameVs:'pc',
-          
+          onlineModal: false
         };
         this.calculateWinner = this.calculateWinner.bind(this);
         this.playerPieces = this.playerPieces.bind(this);
         this.opponent_move = this.opponent_move.bind(this);  
         this.move = this.move.bind(this);
-
         this.clearHistory = this.clearHistory.bind(this);
         this.newRound = this.newRound.bind(this);
         this.pcMove = this.pcMove.bind(this);
         this.nextPlayerMove = this.nextPlayerMove.bind(this);
         this.onlineMove = this.onlineMove.bind(this);
-
         this.selectOpponent = this.selectOpponent.bind(this);
     }
     playerPieces(piece){
@@ -228,6 +227,10 @@ export default class Board extends Component {
     selectOpponent(gameVs){
       this.setState({gameVs: gameVs});
       this.clearHistory();
+      const gameModal = gameVs != 'online'? false : true;
+      this.setState({
+        onlineModal: gameModal
+      });
     }
     renderSquare(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -302,22 +305,23 @@ export default class Board extends Component {
                   playerPieces = {this.playerPieces}
               />
             </div>
+            
             <div className="game-vs">
                 <div className={this.state.gameVs === 'pc' ? "active-pc-button" : "deactived-pc-button"} 
                    onClick={() => this.selectOpponent('pc')}
-                   // onClick={this.selectOpponent('pc')}
                    > PC
                 </div>
                 <div className={this.state.gameVs === 'player'  ? "active-player-button" : "deactived-player-button"} 
                    onClick={() => this.selectOpponent('player')}
-                   // onClick={this.selectOpponent('player')}
                    > Player
                 </div>
                 <div className={this.state.gameVs === 'online' ? "active-online-button" : "deactived-online-button"} 
-                   // onClick={this.selectOpponent('online')}
                    onClick={() => this.selectOpponent('online')}
                    > Online  player
                 </div>
+            </div>
+            <div className = "game-modal">
+              <Connect  show={this.state.onlineModal} />
             </div>
           </div>
         );
