@@ -10,7 +10,15 @@ export default class Connect extends Component {
     return (
       <div className="modal" id="modal">
         <h2>Create game</h2>
-        <div className="content"></div>
+        <div className="content">
+            <div>
+                Create Game
+            </div>
+            <div>
+                Connect
+            </div>
+        </div>
+
         <div className="actions">
           <button className="toggle-button" onClick={this.onClose}>
             close

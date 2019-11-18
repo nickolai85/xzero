@@ -145,7 +145,6 @@ export default class Board extends Component {
     }
 
     handleClick(i) {
-
       if(this.state.roundStatus !='end'){
           const playerPiece = this.state.player.piece;
           const oponentPiece = this.state.opponent.piece;
@@ -232,6 +231,12 @@ export default class Board extends Component {
         onlineModal: gameModal
       });
     }
+
+    showModal = e => {
+      this.setState({
+        onlineModal: false
+      });
+    };
     renderSquare(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[this.state.stepNumber];
@@ -321,7 +326,7 @@ export default class Board extends Component {
                 </div>
             </div>
             <div className = "game-modal">
-              <Connect  show={this.state.onlineModal} />
+              <Connect onClose={this.showModal}  show={this.state.onlineModal} />
             </div>
           </div>
         );
