@@ -10,18 +10,19 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class MessagePushed
+class UserSignedUp implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $username;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($username)
     {
-        //
+        $this->username = $username;
     }
 
     /**
@@ -31,6 +32,9 @@ class MessagePushed
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');
+        return [
+            new Channel('chat'),
+           // new PrivateChannel('user.77'),
+        ];
     }
 }

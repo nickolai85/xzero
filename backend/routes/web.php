@@ -1,5 +1,5 @@
 <?php
-
+use App\Events\UserSignedUp;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+
+    $data = [
+        'event' => 'UserSignedUp',
+        'data' =>[
+            'username' => 'Kolean'
+        ]
+    ];
+
+    event(new UserSignedUp('Kolean'));
 });
 
 Auth::routes();

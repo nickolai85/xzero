@@ -4,6 +4,12 @@ import axios from "axios";
 import Home from './pages/home';
 import SignIn from './auth/signIn';
 import SignUp from './auth/signUp';
+
+import Echo from 'laravel-echo';
+import Socketio from 'socket.io-client';
+//import socketIOClient from 'socket.io-client'
+
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -68,10 +74,35 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    let token =  localStorage.getItem('token');
+  /*  const socket = socketIOClient('http://0.0.0.0:6007');
+    //setInterval(this.send(), 1000)
+    socket.on('myproject_database_chat', (col) => {
+      let obj = JSON.parse(col);
+      console.log(obj.event);
+    })
+    */
+  /*  let token =  localStorage.getItem('token');
       if(token){
         this.checkLoginStatus(token);
        }
+       */
+  let echo = new Echo({
+        broadcaster: 'socket.io',
+        client: Socketio,
+        host: 'http://0.0.0.0:6001'
+  });
+  let idu = 77;
+  echo.private(`myproject_database_private-user.${idu}`)
+   .listen('UserSignedUp', (e) => {
+     console.log(e);
+      console.log('Esti contact');
+   });
+   echo.channel('myproject_database_chat')
+   .listen('UserSignedUp', (e) => {
+       console.log('public channel event received');
+   });
+
+
     }
   render() {
     if(this.state.back_response){
@@ -93,8 +124,8 @@ export default class App extends Component {
               render={props => (
                     <SignIn
                       {...props}
-                      handleSuccessfulLogin={this.handleSuccessfulLogin}
-                      handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
+                      handleSuccessfulLogin   = {this.handleSuccessfulLogin}
+                      handleUnsuccessfulLogin = {this.handleUnsuccessfulLogin}
                   />
                 )} />
              <Route 
