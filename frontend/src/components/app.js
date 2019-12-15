@@ -4,6 +4,8 @@ import axios from "axios";
 import Home from './pages/home';
 import SignIn from './auth/signIn';
 import SignUp from './auth/signUp';
+import Echo from 'laravel-echo';
+import Socketio from 'socket.io-client';
 import {
   BrowserRouter as Router,
   Switch,
@@ -72,6 +74,23 @@ export default class App extends Component {
       if(token){
         this.checkLoginStatus(token);
        }
+
+       let echo = new Echo({
+            broadcaster: 'socket.io',
+            client: Socketio,
+            host: 'http://localhost:6001/'
+        });
+        let idu = 77;
+/*        echo.private(`myproject_database_private-user.${idu}`)
+        .listen('UserSignedUp', (e) => {
+          console.log(e);
+          console.log('Esti contact');
+        });
+ */
+        echo.channel('laravel_database_testCannel')
+        .listen('TestEvent', (e) => {
+          console.log('public channel event received');
+        }); 
     }
   render() {
     if(this.state.back_response){

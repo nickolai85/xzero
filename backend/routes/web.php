@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Redis;
+use App\Events\TestEvent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +22,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('redis', function () {
-    Redis::set('name', 'Jora');
-
-    return Redis::get('name');
+    $data = [
+        'event' => 'UserSignedUp',
+        'data' =>[
+            'username' => 'Jora'
+        ]
+    ];
+    event(new TestEvent('Jora'));
 });

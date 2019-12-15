@@ -71,8 +71,8 @@ backend/npm-debug.log
 yarn-error.log
 backend/.env
 backend/.phpunit.result.cache
-
-
+/backend/laravel-echo-server.lock
+/frontend/package-lock.json
 #frontend
 # nodejs
 frontend/node_modules/
