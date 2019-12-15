@@ -28,8 +28,8 @@ class TestEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('testCannel');
-     //   return new PrivateChannel('testPrivate');
+       // return new Channel('testCannel');
+        return new PrivateChannel('testCannel');
 
 
 /*        return [

@@ -81,17 +81,18 @@ export default class App extends Component {
             host: 'http://localhost:6001/'
         });
         let idu = 77;
-/*        echo.private(`myproject_database_private-user.${idu}`)
-        .listen('UserSignedUp', (e) => {
+        echo.private(`laravel_database_private-testCannel`)
+        .listen('TestEvent', (e) => {
           console.log(e);
           console.log('Esti contact');
         });
- */
+ /*
         echo.channel('laravel_database_testCannel')
         .listen('TestEvent', (e) => {
           console.log('public channel event received');
         }); 
-    }
+*/   
+      }
   render() {
     if(this.state.back_response){
      return (
