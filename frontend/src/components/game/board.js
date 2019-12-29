@@ -177,8 +177,7 @@ export default class Board extends Component {
     }
     nextPlayerMove(){
       console.log('nextPlayerMove');
-      return;
-      
+      return; 
     }
     onlineMove(){
       console.log('onlineMove');
@@ -326,7 +325,10 @@ export default class Board extends Component {
                 </div>
             </div>
             <div className = "game-modal">
-              <Connect onClose={this.showModal}  show={this.state.onlineModal} />
+              <Connect onClose={this.showModal}  
+                        show={this.state.onlineModal}
+                        loggedInStatus={this.props.loggedInStatus}
+                        />
             </div>
           </div>
         );
