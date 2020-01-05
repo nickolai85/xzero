@@ -4,7 +4,15 @@ export default class GameCreate extends Component {
    render() {
      return (
        <div>
-           <h2>Portofolio Items go here ...</h2>
+            <div>
+                Create Game
+            </div>
+            <div>
+                Create Private Game
+            </div>
+            <div>
+                Connect
+            </div>
        </div>
      );
    }

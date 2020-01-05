@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Redis;
 use App\Events\TestEvent;
+use App\Events\TestPivateEvent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,3 +31,12 @@ Route::get('redis', function () {
     ];
     event(new TestEvent('Jora'));
 });
+
+Route::get('private', function () {
+    $data = [
+
+        'data' =>'Pivate message'
+    ];
+    broadcast(new TestPivateEvent($data, 1))->toOthers();
+});
+

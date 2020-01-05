@@ -9,16 +9,26 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TestEvent implements ShouldBroadcast
+class TestPivateEvent implements ShouldQueue, ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $data;
-
-    public function __construct($data )
+    /**
+     * Create a new event instance.
+     *
+     * @return void
+     */
+    public function __construct($message, $channelID)
     {
-        $this->data = $data;
+        $this->message    = $message;
+        $this->channelID  = $channelID;
+    }
+
+    public function broadcastWith()
+    {
+        return ['data' => $this->message];
     }
 
     /**
@@ -28,13 +38,6 @@ class TestEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-       return new Channel('testCannel');
-     //   return new PrivateChannel('testCannel');
-
-
-/*        return [
-            new Channel('chat'),
-            // new PrivateChannel('user.77'),
-        ];*/
+        return new PrivateChannel('chat.'.$this->channelID);
     }
 }

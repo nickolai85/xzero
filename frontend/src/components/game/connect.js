@@ -9,13 +9,12 @@ export default class Connect extends Component {
     if (!this.props.show) {
       return null;
     }
-    console.log('connect ',this.props.loggedInStatus)
     return (
       <div className="modal" id="modal">
         <h2>Create game</h2>
         <div className="content">
 
-        {this.props.loggedInStatus ? <GameCreate /> : <Auth />}
+        {this.props.loggedInStatus ? <GameCreate /> : <a onClick={this.props.open_auth_block}>Sign In</a>}
  
         </div>
 

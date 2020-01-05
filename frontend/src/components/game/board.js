@@ -328,6 +328,7 @@ export default class Board extends Component {
               <Connect onClose={this.showModal}  
                         show={this.state.onlineModal}
                         loggedInStatus={this.props.loggedInStatus}
+                        open_auth_block={this.props.open_auth_block}
                         />
             </div>
           </div>

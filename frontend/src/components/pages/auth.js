@@ -3,24 +3,50 @@ import AuthMenu from "../auth/authMenu";
 import Signin from "../auth/signIn";
 import Signup from "../auth/signUp";
 export default class Auth extends Component  {
-    state = {
-        renderView: 0
-      };
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderView: 0
+    };
+    this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
+    this.handleUnsuccessfulAuth = this.handleUnsuccessfulAuth.bind(this);
+  }
+    handleSuccessfulAuth() {
+      console.log('handleSuccessfulAuth');
+      this.props.handleSuccessfulLogin();
+    }
+
+    handleUnsuccessfulAuth() {
+      this.props.handleUnsuccessfulLogin();
+    }
+   
       clickBtn = e => {
         this.setState({
           renderView: +e.target.value
         });
       };
-    
-      render() {
-        switch (this.state.renderView) {
-          case 1:
-            return <Signin />;
-          case 2:
-            return <Signup />;
-          default:
-            return <AuthMenu clickBtn={this.clickBtn} />;
+      closeBlock = e => {
+        this.props.open_auth_block();
+      };
+      render() {  
+        return(
+        <div>
+          
+            <a onClick={this.props.open_auth_block}>X</a>
+          <div>
+            {this.state.renderView == 1 ?  <Signup
+                            handleSuccessfulAuth={this.handleSuccessfulAuth}
+                            handleUnsuccessfulAuth={this.handleUnsuccessfulAuth}
+                          />: <Signin 
+                            handleSuccessfulAuth={this.handleSuccessfulAuth}
+                            handleUnsuccessfulAuth={this.handleUnsuccessfulAuth}
+                          /> }
+          </div>
+          <div>
+            <AuthMenu clickBtn={this.clickBtn} />
+          </div>
+        </div>
+        );
         }
-      }
+      
 }

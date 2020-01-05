@@ -10,7 +10,10 @@ export default class Game extends Component {
           <div className="game">
             <div className="game-board">
               <Board
-                    loggedInStatus={this.props.loggedInStatus}/>
+                    loggedInStatus={this.props.loggedInStatus}
+                    open_auth_block={this.props.open_auth_block}
+                    />
+                     
             </div>
             <div className="game-info">
               <div>{/* status */}</div>

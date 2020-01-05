@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API_URL} from '../../config/app';
+import { API_URL} from '../../config/env';
 import axios from 'axios';
 export default class SignUp extends Component {
   constructor(props){
@@ -17,12 +17,11 @@ export default class SignUp extends Component {
   }
 
   handleSuccessfulAuth() {
-    this.props.handleSuccessfulLogin();
-    this.props.history.push("/");
+    this.props.handleSuccessfulAuth();
   }
 
   handleUnsuccessfulAuth() {
-    this.props.handleUnsuccessfulLogin();
+    this.props.handleUnsuccessfulAuth();
   }
   handleChange(event) {
     this.setState({
@@ -44,7 +43,7 @@ handleSubmit(event){
     }
   }
   
-  axios.post(API_URL+"api/signup",data,header)
+  axios.post(API_URL+"signup",data,header)
     .then(response =>{
       if(response.data.token !=''){
         localStorage.setItem('token', response.data.token);
