@@ -25,4 +25,6 @@ Route::group(['middleware' =>'api.auth'], function () {
     });
     Route::post('/signin', 'Api\AuthController@signIn')->name('signIn.api');
     Route::post('/signup', 'Api\AuthController@signUp')->name('signUp.api');
+    Route::post('/channel/create', 'Api\ChannelController@store')->name('create.channel');
+
 });
