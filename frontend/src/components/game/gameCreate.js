@@ -12,7 +12,9 @@ export default class GameCreate extends Component {
   }
   GameCreate(e) {
     let type = e.target.value;
+    let token =  localStorage.getItem('token');
     let code = '';
+    let status = 'opened';
     if(type == 'private'){
       code = 'generated_code';
     }
@@ -20,7 +22,7 @@ export default class GameCreate extends Component {
     let data = {
       game_id: 1,
       code: code,
-      password: this.state.password,
+      status: status,
     };
     let header = {headers: {
       Accept:'application/json',
