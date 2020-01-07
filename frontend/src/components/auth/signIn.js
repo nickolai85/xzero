@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { API_URL} from '../../config/env';
+import {LOGIN_URL,CLIENT_SECRECT,CLIENT_ID} from '../../config/env';
 import axios from 'axios';
 export default class SignIn extends Component {
   constructor(props){
@@ -30,16 +30,20 @@ export default class SignIn extends Component {
   }
   handleSubmit(event){
     let data = {
+      grant_type:'password',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRECT,
       email: this.state.email,
-      password: this.state.password,
-    };
+      password: this.state.password
+    }
+    
     let header = {
       headers: {
         Accept: 'application/json',
       }
     }
 
-    axios.post(API_URL+"signin",data,header)
+    axios.post(LOGIN_URL,data,header)
       .then(response =>{
         if(response.data.token !=''){
           localStorage.setItem('token', response.data.token);

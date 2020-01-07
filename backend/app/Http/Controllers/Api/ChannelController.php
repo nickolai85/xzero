@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\User;
 class ChannelController extends Controller
 {
     /**
@@ -35,7 +35,10 @@ class ChannelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        echo '<pre>';
+        print_r(auth()->id());
+        echo '</pre>';
+        exit();
     }
 
     /**
