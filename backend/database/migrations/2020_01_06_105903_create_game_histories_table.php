@@ -15,6 +15,9 @@ class CreateGameHistoriesTable extends Migration
     {
         Schema::create('game_histories', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('channel_id')->unsigned();
+            $table->foreign('channel_id')->references('id')->on('channels')->onDelete('cascade');
+            $table->text('moves')->default(null);
             $table->timestamps();
         });
     }

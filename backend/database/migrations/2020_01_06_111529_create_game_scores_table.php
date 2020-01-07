@@ -15,7 +15,14 @@ class CreateGameScoresTable extends Migration
     {
         Schema::create('game_scores', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('channel_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('score')->default(null);
             $table->timestamps();
+        });
+        Schema::table('game_scores', function($table) {
+            $table->foreign('channel_id')->references('id')->on('channels')->onDelete('cascade');
         });
     }
 
