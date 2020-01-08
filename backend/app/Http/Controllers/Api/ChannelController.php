@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TestPivateEvent;
+use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -35,10 +37,24 @@ class ChannelController extends Controller
      */
     public function store(Request $request)
     {
-        echo '<pre>';
-        print_r(auth()->id());
-        echo '</pre>';
-        exit();
+        $code='';
+        if($request->get('status') == 'private'){
+            $code = uniqid();
+        }
+
+
+        $data = new Channel();
+        $data->created_user  = auth()->id();
+        $data->joined_user = 0;
+        $data->game_id = $request->get('game_id');
+        $data->code = $code;
+        $data->status = $request->get('status');
+        $data->save();
+        broadcast(new TestPivateEvent($data, 3))->toOthers();
+
+        return response()->json(array('success' => true, 'channel_id' => $data->id,'code' => $data->code), 200);
+
+
     }
 
     /**

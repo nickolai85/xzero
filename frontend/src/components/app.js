@@ -120,21 +120,19 @@ export default class App extends Component {
   }
 
   test_channel(){
-    window.Echo.channel('laravel_database_testCannel')
+    window.Echo.channel('myproject_database_testCannel')
     .listen('TestEvent', (e) => {
-
-      alert('tat ii bat');
       console.log('public channel event received');
-    });
+    }); 
   }
   test_private(){
-
-    window.Echo.private(`testPrivate.1`)
-    .listen('TestEvent', (e) => {
-
-      alert('tat ii bat');
-      console.log('public channel event received');
+    window.Echo.private(`myproject_database_private-test.3`)
+    .listen('TestPivateEvent', (e) => {
+      console.log(e);
+      console.log('Esti contact');
     });
+
+  
   }
 
   componentDidMount() {
@@ -142,19 +140,7 @@ export default class App extends Component {
       this.checkLoginStatus(token);
       this.socket_connection(token);
       this.test_channel();
-        let idu = 77;
- /*
-        echo.private(`laravel_database_private-testCannel`)
-        .listen('TestEvent', (e) => {
-          console.log(e);
-          console.log('Esti contact');
-        });
- 
-        echo.channel('laravel_database_testCannel')
-        .listen('TestEvent', (e) => {
-          console.log('public channel event received');
-        }); 
-*/   
+      this.test_private()
       }
   render() {
     if(this.state.back_response){

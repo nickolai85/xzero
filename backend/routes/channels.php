@@ -1,7 +1,9 @@
 <?php
 use App\Broadcasting\testChannel;
 
-Broadcast::channel('test.{channel}', testChannel::class);
+//Broadcast::channel('test.{channel}', testChannel::class);
+
+
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels

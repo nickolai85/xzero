@@ -24,15 +24,15 @@ class testChannel
      */
     public function join(User $user, Channel $channel)
     {
-echo '<pre>';
-print_r($user->id);
-echo '</pre>';
-exit();
-        $userIds = [$channel->created_user, $channel->joined_user];
-        if (in_array($user->id, $userIds)) {
-            return true;
-        }
+/*        echo '<pre>';
+        print_r($user->id);
+        echo '</pre>';
+        exit();*/
+      //  $userIds = [$channel->created_user, $channel->id];
+        //if (in_array($user->id, $userIds)) {
+            return false;
+        //}
 
-        return false;
+        //return false;
     }
 }

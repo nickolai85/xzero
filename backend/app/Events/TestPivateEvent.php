@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class TestPivateEvent implements ShouldQueue, ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    public $message, $channelID;
     /**
      * Create a new event instance.
      *
@@ -38,6 +38,6 @@ class TestPivateEvent implements ShouldQueue, ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.'.$this->channelID);
+        return new PrivateChannel('test.'.$this->channelID);
     }
 }

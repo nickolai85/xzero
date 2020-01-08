@@ -33,7 +33,7 @@ export default class SignIn extends Component {
       grant_type:'password',
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRECT,
-      email: this.state.email,
+      username: this.state.email,
       password: this.state.password
     }
     
@@ -45,8 +45,10 @@ export default class SignIn extends Component {
 
     axios.post(LOGIN_URL,data,header)
       .then(response =>{
-        if(response.data.token !=''){
-          localStorage.setItem('token', response.data.token);
+        console.log('access_token',response);
+        if(response.data.access_token !=''){
+          
+          localStorage.setItem('token', response.data.access_token);
           this.handleSuccessfulAuth();
         } else{
           this.setState({
