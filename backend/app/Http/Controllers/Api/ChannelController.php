@@ -14,9 +14,16 @@ class ChannelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function channelList()
     {
-        //
+        $list = Channel::all();
+        $rs =[];
+        foreach ($list as $key => $value){
+            $rs[$key]['channel_id'] = $value->id;
+            $rs[$key]['owner'] = $value->gameCreator->name;
+            $rs[$key]['status'] = $value->status;
+        }
+        return response()->json(array('success' => true, 'channels' => $rs), 200);
     }
 
     /**

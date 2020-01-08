@@ -15,9 +15,12 @@ class Channel extends Model
     {
         return $this->belongsTo(User::class, 'created_user');
     }
-
     public function joinedGame()
     {
         return $this->belongsTo(User::class, 'joined_user');
+    }
+    public function channelsWithCreators()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

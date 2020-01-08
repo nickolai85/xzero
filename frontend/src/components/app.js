@@ -39,6 +39,8 @@ export default class App extends Component {
         Accept:'application/json',
         Authorization:`Bearer ${token}`
         }};
+
+        
     return axios
       .get(API_URL+"user",data)
       .then(response => {

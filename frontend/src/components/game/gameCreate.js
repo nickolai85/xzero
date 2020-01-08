@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { API_URL} from '../../config/env';
 import axios from 'axios';
+import Channels from './channels';
 export default class GameCreate extends Component {
   constructor(props){
     super(props);
@@ -62,6 +63,10 @@ export default class GameCreate extends Component {
                 Connect
               </button>
             </div>
+            <div>
+              <Channels />
+            </div>
+            
        </div>
      );
    }
