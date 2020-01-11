@@ -122,9 +122,9 @@ export default class App extends Component {
   }
 
   test_channel(){
-    window.Echo.channel('myproject_database_testCannel')
+    window.Echo.channel('laravel_database_testCannel')
     .listen('TestEvent', (e) => {
-      console.log('public channel event received');
+      console.log('public channel event received',e);
     }); 
   }
   test_private(){
@@ -141,7 +141,7 @@ export default class App extends Component {
     let token =  localStorage.getItem('token');
       this.checkLoginStatus(token);
       this.socket_connection(token);
-      this.test_channel();
+    //  this.test_channel();
       this.test_private()
       }
   render() {

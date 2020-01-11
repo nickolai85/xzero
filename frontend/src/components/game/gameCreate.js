@@ -32,7 +32,7 @@ export default class GameCreate extends Component {
   return axios
   .post(API_URL+"channel/create",data,header)
     .then(response => {
-
+      console.log('GameCreate',response)
     })
     .catch(error => {
       console.log("Error", error);
@@ -43,7 +43,26 @@ export default class GameCreate extends Component {
   }
     
   joinGame(e) {
-    console.log('joinGame',e);
+    let channel = e.target.id;
+    let token =  localStorage.getItem('token');
+    let data = {
+      game_id: 1
+    };
+    let header = {headers: {
+      Accept:'application/json',
+      Authorization:`Bearer ${token}`
+      }};
+      return axios
+    .put(API_URL+"channel/join/"+channel,data,header)
+    .then(response => {
+      console.log('joinGameResponse',response);
+    })
+    .catch(error => {
+      console.log("Error", error);
+      this.setState({
+        back_response: 'error'
+      });
+    });
   }
    render() {
      return (
@@ -64,7 +83,7 @@ export default class GameCreate extends Component {
               </button>
             </div>
             <div>
-              <Channels />
+              <Channels joinGame={this.joinGame} />
             </div>
             
        </div>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\TestPivateEvent;
+use App\Events\TestEvent;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,10 +19,15 @@ class ChannelController extends Controller
         $list = Channel::all();
         $rs =[];
         foreach ($list as $key => $value){
-            $rs[$key]['channel_id'] = $value->id;
+            $rs[$key]['id'] = $value->id;
             $rs[$key]['owner'] = $value->gameCreator->name;
             $rs[$key]['status'] = $value->status;
         }
+        $data = [
+            'event' => 'UserSignedUp',
+            'data' =>$rs
+        ];
+
         return response()->json(array('success' => true, 'channels' => $rs), 200);
     }
 
@@ -57,9 +62,14 @@ class ChannelController extends Controller
         $data->code = $code;
         $data->status = $request->get('status');
         $data->save();
-        broadcast(new TestPivateEvent($data, 3))->toOthers();
-
-        return response()->json(array('success' => true, 'channel_id' => $data->id,'code' => $data->code), 200);
+       // broadcast(new TestPivateEvent($data, 3))->toOthers();
+        $rs =[
+          'id'=>  $data->id,
+          'owner'=>  $request->user()->name,
+         // 'status'=>  $request->get('status')
+        ];
+        event(new TestEvent($rs));
+        return response()->json(array('success' => true, 'id' => $data->id,'code' => $data->code), 200);
 
 
     }
@@ -95,7 +105,10 @@ class ChannelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        echo '<pre>';
+        print_r($request->all());
+        echo '</pre>';
+        exit();
     }
 
     /**

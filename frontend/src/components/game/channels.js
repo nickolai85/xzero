@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import { API_URL} from '../../config/env';
+import Channel from '../game/channel';
 import axios from 'axios';
 export default class Сhannels extends Component {
-    constructor() {
-        super();
-    
+    constructor(props) {
+        super(props);
         this.state = {
           channels: [],
           isLoading: false
         }; 
         this.getChannels = this.getChannels.bind(this);
+        this.activeChannels = this.activeChannels.bind(this);
+        this.selectChannel = this.selectChannel.bind(this);
+        this.listen_NewChannels = this.listen_NewChannels.bind(this);
       }
     getChannels(token) {
         this.setState({
@@ -32,27 +35,40 @@ export default class Сhannels extends Component {
             console.log("error in channels", error);
           });    
       }
- 
+      listen_NewChannels(){
+        window.Echo.channel('laravel_database_testCannel')
+        .listen('TestEvent', (e) => {
+          console.log('public channel event received',e);
+          this.setState({
+            isLoading: false,
+            channels: [...this.state.channels, ...[e.data] ] 
+        });
+        }); 
+      }
+
+
+      selectChannel(e){
+        console.log('channel___',e.target.id);
+      }
+
+      activeChannels(){
+        return this.state.channels.map(item =>{
+          return <Channel key={item.id} item={item} selectChannel={this.props.joinGame} />;
+        });
+      } 
+      
+
       componentDidMount() {
         let token =  localStorage.getItem('token');
         this.getChannels(token);
+        this.listen_NewChannels();
       }
 
     render() {
-        if(this.state.isLoading != true){
-            console.log('channels',this.state.channels);
             return (
                 <div>
-                    List
+                     {this.state.isLoading != true ? this.activeChannels() : <div>isLoading</div>}
                 </div>
-            )
-        }else{
-            return (
-                <div>
-                    isLoading
-                </div>
-            )
-        }
-
+            );
     }
 }
