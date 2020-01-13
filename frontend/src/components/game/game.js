@@ -20,6 +20,7 @@ export default class Game extends Component {
       })
   }
   renderGame(){
+    console.log('this.state.vs)',this.state.vs);
     switch(this.state.vs) {
         case 'online':
           return <InitGame loggedInStatus={this.props.loggedInStatus} />

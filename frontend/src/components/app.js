@@ -133,8 +133,6 @@ export default class App extends Component {
       console.log(e);
       console.log('Esti contact');
     });
-
-  
   }
 
   componentDidMount() {

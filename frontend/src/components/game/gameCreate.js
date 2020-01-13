@@ -6,7 +6,7 @@ export default class GameCreate extends Component {
   constructor(props){
     super(props);
     this.state={
-
+        game_id: '',
     }
     this.GameCreate = this.GameCreate.bind(this);
     this.joinGame = this.joinGame.bind(this);
@@ -32,7 +32,11 @@ export default class GameCreate extends Component {
   return axios
   .post(API_URL+"channel/create",data,header)
     .then(response => {
-      console.log('GameCreate',response)
+      console.log('GameCreated',response);
+      let gamedata = response.data;
+      gamedata["status"] = "owner";
+      this.props.handleSuccessfulCreated(gamedata);
+
     })
     .catch(error => {
       console.log("Error", error);
@@ -65,6 +69,7 @@ export default class GameCreate extends Component {
     });
   }
    render() {
+     console.log('Component loaded!');
      return (
        <div>
             <div>
