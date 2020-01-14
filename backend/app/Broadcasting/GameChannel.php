@@ -26,7 +26,7 @@ class GameChannel
     public function join(User $user, Channel $channel)
     {
 
-        $userIds = [$channel->sender_id, $channel->receiver_id];
+        $userIds = [$channel->created_user, $channel->joined_user];
         if (in_array($user->id, $userIds)) {
             return true;
         }

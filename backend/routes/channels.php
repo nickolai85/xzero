@@ -1,8 +1,7 @@
 <?php
-use App\Broadcasting\testChannel;
+use App\Broadcasting\GameChannel;
 
-//Broadcast::channel('test.{channel}', testChannel::class);
-
+Broadcast::channel('game.{channel}', GameChannel::class);
 
 /*
 |--------------------------------------------------------------------------

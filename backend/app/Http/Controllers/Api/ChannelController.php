@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\TestEvent;
+use App\Events\UserConnected;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -103,12 +104,33 @@ class ChannelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $channelID)
     {
-        echo '<pre>';
-        print_r($request->all());
-        echo '</pre>';
-        exit();
+
+        $channel = Channel::findOrFail($channelID);
+        $channel->joined_user = auth()->id();
+        $channel->save();
+
+        $opponent = User::findOrFail($channel->created_user);
+
+        $message =[
+            'event'=>[
+                'message'      => 'user_connected',
+                'channel_id'   => $channelID,
+                'status'       => 1,
+                'oponnent_id'  => $channel->joined_user,
+                'oponnent_name'    => $request->user()->name
+            ],
+            'response'=>[
+                'message'      => 'connected',
+                'channel_id'   => $channelID,
+                'status'       => 1,
+                'oponnent_id'  => $channel->created_user,
+                'oponnent_name'    => $opponent->name
+            ]
+        ];
+        broadcast(new UserConnected(json_encode($message['event']), $channelID))->toOthers();
+        return response()->json(array('success' => true, 'message' => $message['response']), 200);
     }
 
     /**
