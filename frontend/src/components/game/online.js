@@ -13,13 +13,14 @@ export default class Online extends Component {
         this.liveGame = this.liveGame.bind(this);
     }
     liveGame(channelId){
-        window.Echo.private(`myproject_database_private-game.36`)
+        console.log('liveGame',channelId)
+        window.Echo.private('game.'+channelId)
         .listen('UserConnect',(e)=>{
             console.log('UserConnected',e);
         })
     }
     componentDidMount() {
-
+        console.log('componentDidMount',this.props)
         this.liveGame(this.state.userData.id);
     }     
     render() {

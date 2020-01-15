@@ -8,7 +8,7 @@ export default class InitOnlineGame extends Component {
         super(props);
         this.state={
             game: false,
-            userData:{},
+            userData:'',
         }
         this.renderComponent = this.renderComponent.bind(this);
         this.handleSuccessfulCreated = this.handleSuccessfulCreated.bind(this);
@@ -17,12 +17,10 @@ export default class InitOnlineGame extends Component {
       }
       handleSuccessfulCreated(gameData){
         this.setState({
-            game:true
-        })
-
-        this.setState({
+            game:true,
             userData:gameData
         })
+
       }
       handleSuccessfulJoined(){
         console.log('error');
@@ -31,7 +29,7 @@ export default class InitOnlineGame extends Component {
         console.log('error');
       }
       renderComponent(){
-        console.log('this.state.game',this.state.game)
+        console.log('init state',this.state)
         if(!this.props.loggedInStatus){
             return <Auth />;
         }

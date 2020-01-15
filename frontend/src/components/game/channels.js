@@ -36,7 +36,7 @@ export default class Сhannels extends Component {
           });    
       }
       listen_NewChannels(){
-        window.Echo.channel('myproject_database_testCannel')
+        window.Echo.channel('testCannel')
         .listen('TestEvent', (e) => {
           console.log('public channel event received',e);
           this.setState({
