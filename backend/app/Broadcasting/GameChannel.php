@@ -26,11 +26,17 @@ class GameChannel
     public function join(User $user, Channel $channel)
     {
 
-        $userIds = [$channel->created_user, $channel->joined_user];
-        if (in_array($user->id, $userIds)) {
-            return true;
-        }
+        try {
+            $userIds = [$channel->created_user, $channel->joined_user];
+            if (in_array($user->id, $userIds)) {
+                return true;
+            }
 
-        return false;
+            return false;
+        }
+        catch (\Exception $e) {
+            \Log::alert('GammeChannel Error: '. $e);
+            return false;
+        }
     }
 }

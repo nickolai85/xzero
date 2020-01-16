@@ -34,6 +34,6 @@ class UserConnected implements ShouldQueue, ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('game.'.$this->channelID);
+        return new Channel('game.'.$this->channelID);
     }
 }

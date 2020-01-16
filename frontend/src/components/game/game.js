@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import WithPc from './withPc';
 import Menu from './menu';
-import Online from './online';
-import GameCreate from "./gameCreate";
 import InitGame from "./initOnlineGame";
 import WithPlayer from './withPlayer';
 export default class Game extends Component {

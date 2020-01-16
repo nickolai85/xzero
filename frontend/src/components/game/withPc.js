@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Square from './square';
 import BoardFooter from './boardFooter';
-import Connect from './connect';
+//import Connect from './connect';
 export default class WithPc extends Component {
     constructor(props) {
         super(props);
@@ -308,28 +308,6 @@ export default class WithPc extends Component {
                   round = {this.state.round}
                   playerPieces = {this.playerPieces}
               />
-            </div>
-            
-            <div className="game-vs">
-                <div className={this.state.gameVs === 'pc' ? "active-pc-button" : "deactived-pc-button"} 
-                   onClick={() => this.selectOpponent('pc')}
-                   > PC
-                </div>
-                <div className={this.state.gameVs === 'player'  ? "active-player-button" : "deactived-player-button"} 
-                   onClick={() => this.selectOpponent('player')}
-                   > Player
-                </div>
-                <div className={this.state.gameVs === 'online' ? "active-online-button" : "deactived-online-button"} 
-                   onClick={() => this.selectOpponent('online')}
-                   > Online  player
-                </div>
-            </div>
-            <div className = "game-modal">
-              <Connect onClose={this.showModal}  
-                        show={this.state.onlineModal}
-                        loggedInStatus={this.props.loggedInStatus}
-                        open_auth_block={this.props.open_auth_block}
-                        />
             </div>
           </div>
         );

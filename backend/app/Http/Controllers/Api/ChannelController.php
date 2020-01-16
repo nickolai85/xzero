@@ -54,8 +54,6 @@ class ChannelController extends Controller
         if($request->get('status') == 'private'){
             $code = uniqid();
         }
-
-
         $data = new Channel();
         $data->created_user  = auth()->id();
         $data->joined_user = 0;
@@ -71,7 +69,6 @@ class ChannelController extends Controller
         ];
         event(new TestEvent($rs));
         return response()->json(array('success' => true, 'id' => $data->id,'code' => $data->code), 200);
-
 
     }
 
@@ -115,18 +112,27 @@ class ChannelController extends Controller
 
         $message =[
             'event'=>[
+                'channel' => [
+                    'id'   => $channelID,
+                    'status' => 1,
+                ],
+                'opponent' => [
+                    'id'  => $channel->joined_user,
+                    'name'    => $request->user()->name
+                ],
                 'message'      => 'user_connected',
-                'channel_id'   => $channelID,
-                'status'       => 1,
-                'oponnent_id'  => $channel->joined_user,
-                'oponnent_name'    => $request->user()->name
             ],
+
             'response'=>[
+                'channel' => [
+                    'id'   => $channelID,
+                    'status' => 1,
+                ],
+                'opponent' => [
+                    'id'  => $channel->created_user,
+                    'name'    => $opponent->name
+                ],
                 'message'      => 'connected',
-                'channel_id'   => $channelID,
-                'status'       => 1,
-                'oponnent_id'  => $channel->created_user,
-                'oponnent_name'    => $opponent->name
             ]
         ];
         broadcast(new UserConnected(json_encode($message['event']), $channelID))->toOthers();

@@ -7,11 +7,16 @@ export default class GameCreate extends Component {
     super(props);
     this.state={
         game_id: '',
+        isLoading: false
     }
     this.GameCreate = this.GameCreate.bind(this);
     this.joinGame = this.joinGame.bind(this);
+    
   }
   GameCreate(e) {
+    this.setState({
+      isLoading: true
+    });
     let type = e.target.value;
     let token =  localStorage.getItem('token');
     let code = '';
@@ -36,7 +41,9 @@ export default class GameCreate extends Component {
       let gamedata = response.data;
       gamedata["status"] = "owner";
       this.props.handleSuccessfulCreated(gamedata);
-
+      this.setState({
+        isLoading: false
+      });
     })
     .catch(error => {
       console.log("Error", error);
@@ -59,7 +66,9 @@ export default class GameCreate extends Component {
       return axios
     .put(API_URL+"channel/join/"+channel,data,header)
     .then(response => {
-      console.log('joinGameResponse',response);
+      let gamedata = response.data;
+      gamedata["status"] = "joined";
+      this.props.handleSuccessfulJoined(gamedata);
     })
     .catch(error => {
       console.log("Error", error);
@@ -70,6 +79,7 @@ export default class GameCreate extends Component {
   }
    render() {
      console.log('Component loaded!');
+     if(!this.state.isLoading){
      return (
        <div>
             <div>
@@ -93,5 +103,13 @@ export default class GameCreate extends Component {
             
        </div>
      );
+     }
+     else{
+       return (
+          <div>
+            isLoading
+          </div>
+       );
+     }
    }
  }

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import GameCreate from './gameCreate';
 import Auth from '../pages/auth';
-import Game from './online';
+import OnlineGame from './onlineGame';
 export default class InitOnlineGame extends Component {
 
     constructor(props){
         super(props);
         this.state={
             game: false,
-            userData:'',
+            response:'',
         }
         this.renderComponent = this.renderComponent.bind(this);
         this.handleSuccessfulCreated = this.handleSuccessfulCreated.bind(this);
@@ -18,12 +18,14 @@ export default class InitOnlineGame extends Component {
       handleSuccessfulCreated(gameData){
         this.setState({
             game:true,
+            response:gameData
+        })
+      }
+      handleSuccessfulJoined(gameData){
+        this.setState({
+            game:true,
             userData:gameData
         })
-
-      }
-      handleSuccessfulJoined(){
-        console.log('error');
       }
       handleUnSuccessfulStart(){
         console.log('error');
@@ -38,11 +40,12 @@ export default class InitOnlineGame extends Component {
                 console.log('false');
                 return <GameCreate  
                         handleSuccessfulCreated={this.handleSuccessfulCreated}
+                        handleSuccessfulJoined={this.handleSuccessfulJoined}
                         handleUnSuccessfulStart={this.handleUnSuccessfulStart}
                     /> 
             }
             else{
-                return <Game userData={this.state.userData}/>
+                return <OnlineGame userData={this.state.userData}/>
             }
         }
       }

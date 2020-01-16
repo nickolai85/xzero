@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import GameCreate from './gameCreate';
+
 import Auth from '../pages/auth';
 export default class Connect extends Component {
   onClose = e => {
