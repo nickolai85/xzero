@@ -3,6 +3,7 @@ import WithPc from './withPc';
 import Menu from './menu';
 import InitGame from "./initOnlineGame";
 import WithPlayer from './withPlayer';
+import WithOnlinePlayer from './withOnlinePlayer'
 export default class Game extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,8 @@ export default class Game extends Component {
     console.log('this.state.vs)',this.state.vs);
     switch(this.state.vs) {
         case 'online':
-          return <InitGame loggedInStatus={this.props.loggedInStatus} />
+          //return <InitGame loggedInStatus={this.props.loggedInStatus} />
+          return !this.props.loggedInStatus ? <Auth /> : <WithOnlinePlayer />
         break;
       case 'player':
           return <WithPlayer />

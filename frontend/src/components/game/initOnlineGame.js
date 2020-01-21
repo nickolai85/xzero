@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import GameCreate from './gameCreate';
 import Auth from '../pages/auth';
 import OnlineGame from './onlineGame';
+//to remove
 export default class InitOnlineGame extends Component {
 
     constructor(props){

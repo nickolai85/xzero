@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Board from './board';
+//to remove
 export default class Online extends Component {
     constructor(props){
         super(props);
