@@ -3,6 +3,7 @@ import { API_URL} from '../../config/env';
 import Channel from '../game/channel';
 import axios from 'axios';
 export default class Сhannels extends Component {
+  _isMounted = false;
     constructor(props) {
         super(props);
         this.state = {
@@ -59,11 +60,14 @@ export default class Сhannels extends Component {
       
 
       componentDidMount() {
+        this._isMounted = true;
         let token =  localStorage.getItem('token');
         this.getChannels(token);
         this.listen_NewChannels();
       }
-
+      componentWillUnmount() {
+        this._isMounted = false;
+      }
     render() {
             return (
                 <div>

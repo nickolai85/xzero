@@ -37,9 +37,7 @@ export default class GameCreate extends Component {
   return axios
   .post(API_URL+"channel/create",data,header)
     .then(response => {
-      console.log('GameCreated',response);
       let gamedata = response.data;
-      gamedata["status"] = "owner";
       this.props.handleSuccessfulCreated(gamedata);
       this.setState({
         isLoading: false
@@ -78,7 +76,6 @@ export default class GameCreate extends Component {
     });
   }
    render() {
-     console.log('Component loaded!');
      if(!this.state.isLoading){
      return (
        <div>

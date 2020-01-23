@@ -15,6 +15,8 @@ import {
  } from "react-router-dom";
  
 export default class App extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -136,12 +138,16 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     let token =  localStorage.getItem('token');
       this.checkLoginStatus(token);
       this.socket_connection(token);
     //  this.test_channel();
       this.test_private()
       }
+  componentWillUnmount() {
+      this._isMounted = false;
+  }
   render() {
     if(this.state.back_response){
      return (
