@@ -111,16 +111,9 @@ class ChannelController extends Controller
         $opponent = User::findOrFail($channel->created_user);
 
         $message =[
-            'event'=>[
-                'channel' => [
-                    'id'   => $channelID,
-                    'status' => 1,
-                ],
-                'opponent' => [
+            'opponent'=>[
                     'id'  => $channel->joined_user,
                     'name'    => $request->user()->name
-                ],
-                'message'      => 'user_connected',
             ],
 
             'response'=>[
@@ -135,10 +128,13 @@ class ChannelController extends Controller
                 'message'      => 'connected',
             ]
         ];
-        broadcast(new UserConnected(json_encode($message['event']), $channelID))->toOthers();
+        broadcast(new UserConnected($this->ChannelData($message['opponent']), $channelID))->toOthers();
         return response()->json(array('success' => true, 'message' => $message['response']), 200);
     }
 
+    public function ChannelData($data){
+        return response()->json(['data'=> $data],200);
+    }
     /**
      * Remove the specified resource from storage.
      *

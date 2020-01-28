@@ -8,11 +8,12 @@ export default class Сhannels extends Component {
         super(props);
         this.state = {
           channels: [],
-          isLoading: false
+          isLoading: false,
+          isMounted: false
         }; 
         this.getChannels = this.getChannels.bind(this);
         this.activeChannels = this.activeChannels.bind(this);
-        this.selectChannel = this.selectChannel.bind(this);
+    //    this.selectChannel = this.selectChannel.bind(this);
         this.listen_NewChannels = this.listen_NewChannels.bind(this);
       }
     getChannels(token) {
@@ -27,10 +28,12 @@ export default class Сhannels extends Component {
           .get(API_URL+"channel/list",header)
           .then(response => {
             console.log("response channels", response);
+            if (this.state.isMounted) {
             this.setState({
                 isLoading: false,
                 channels: [...response.data.channels]
             });
+          }
           })
           .catch(error => {
             console.log("error in channels", error);
@@ -47,14 +50,9 @@ export default class Сhannels extends Component {
         }); 
       }
 
-
-      selectChannel(e){
-        console.log('channel___',e.target.id);
-      }
-
       activeChannels(){
         return this.state.channels.map(item =>{
-          return <Channel key={item.id} item={item} selectChannel={this.props.joinGame} />;
+          return <Channel key={item.id} item={item} handleSuccessfulJoined={this.props.handleSuccessfulJoined} />;
         });
       } 
       
@@ -64,9 +62,11 @@ export default class Сhannels extends Component {
         let token =  localStorage.getItem('token');
         this.getChannels(token);
         this.listen_NewChannels();
+        this.setState({isMounted: true})
       }
       componentWillUnmount() {
         this._isMounted = false;
+        this.state.isMounted = false
       }
     render() {
             return (
