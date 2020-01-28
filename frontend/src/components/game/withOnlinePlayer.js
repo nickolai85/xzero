@@ -141,6 +141,7 @@ export default class WithOnlinePlayer extends Component {
   }
 
   handleClick = e => {
+    if(this.state.myMove){
       const squares = this.state.squares.slice();
       squares[e] = this.state.piece;
       this.setState({
@@ -148,6 +149,7 @@ export default class WithOnlinePlayer extends Component {
         myMove:false
       });
       this.sendMove(e);
+    }
   };
     renderComponent(){
         if(this.state.inGame){
