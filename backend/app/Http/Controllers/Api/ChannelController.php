@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\TestEvent;
 use App\Events\UserConnected;
+use App\Events\UserMove;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -134,6 +135,11 @@ class ChannelController extends Controller
 
     public function ChannelData($data){
         return response()->json(['data'=> $data],200);
+    }
+    public function Move(Request $request,$channelID){
+
+        broadcast(new UserMove($this->ChannelData($request->all()), $channelID,$request->get('to')))->toOthers();
+
     }
     /**
      * Remove the specified resource from storage.

@@ -25,6 +25,8 @@ Route::group(['middleware' =>'api.auth'], function () {
         Route::post('/channel/create', 'Api\ChannelController@store')->name('create.channel');
         Route::get('/channel/list', 'Api\ChannelController@channelList')->name('channel.list');
         Route::put('/channel/join/{id}', 'Api\ChannelController@update')->name('channel.join');
+        Route::post('/channel/move/{id}', 'Api\ChannelController@Move')->name('channel.Move');
+
     });
     Route::post('/signin', 'Api\AuthController@signIn')->name('signIn.api');
     Route::post('/signup', 'Api\AuthController@signUp')->name('signUp.api');

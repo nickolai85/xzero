@@ -53,6 +53,7 @@ export default class App extends Component {
             userdata:{...response.data.user},
             back_response: 'ok'
           });
+          localStorage.setItem('id', response.data.user.id);
         }
       })
       .catch(error => {

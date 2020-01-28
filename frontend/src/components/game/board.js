@@ -5,25 +5,33 @@ export default class componentName extends Component {
     constructor(props){
         super(props);
         this.state = {
-            history: [{
-                squares: Array(9).fill(null)
-              }],
             stepNumber: 0,
         }
+       // this.handleClick=this.handleClick.bind(this);
     }
+    // handleClick(i){
+    //   if(this.props.myMove){
+    //     const squares = this.props.squares.slice();
+    //     squares[i] = this.props.piece;
+    //     this.setState({
+    //       squares: squares,
+    //     });
+    //     this.props.handleMove(i)
+    //   }
+    // }
+
     renderSquare(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        const current = history[this.state.stepNumber];
         return (
           <Square
-            value={current.squares[i]}
-            onClick={() => this.handleClick(i)}
+            value={this.props.squares[i]}
+            onClick={() => this.props.handleClick(i)}
           />
         );
     }
     render() {
         return (
-        <div>   
+        <div className={this.props.myMove ? 'active_board' : 'disabled_board'}>   
+           {console.log('square_props',this.props)}
             <div className="board-row">
             {this.renderSquare(0)}
               {this.renderSquare(1)}

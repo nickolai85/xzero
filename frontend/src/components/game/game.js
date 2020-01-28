@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import WithPc from './withPc';
 import Menu from './menu';
-import InitGame from "./initOnlineGame";
+import Auth from "../pages/auth";
 import WithPlayer from './withPlayer';
-import WithOnlinePlayer from './withOnlinePlayer'
+import WithOnlinePlayer from './withOnlinePlayer';
+
 export default class Game extends Component {
   constructor(props) {
     super(props);
