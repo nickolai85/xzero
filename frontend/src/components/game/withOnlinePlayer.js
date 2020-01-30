@@ -4,6 +4,7 @@ import axios from 'axios';
 import Board from './board';
 import GameCreate from './gameCreate';
 import Channels from './channels';
+import EndGameModal from './endGameModal'
 export default class WithOnlinePlayer extends Component {
   _isMounted = false;
     constructor(){
@@ -16,7 +17,13 @@ export default class WithOnlinePlayer extends Component {
         gameData: '',
         piece: '',
         myMove:false,
-        isListen:false
+        isListen:false,
+        round: 1,
+        myScore: 0,
+        opponentScore:0,
+        tie:0,
+        end_gameNotif:false
+
       };
       this.renderComponent = this.renderComponent.bind(this);
       this.handleSuccessfulCreated = this.handleSuccessfulCreated.bind(this);
@@ -25,6 +32,13 @@ export default class WithOnlinePlayer extends Component {
       this.liveGame = this.liveGame.bind(this);
       this.sendMove = this.sendMove.bind(this);
       this.handleMoveEvent = this.handleMoveEvent.bind(this);
+      this.calculateWinner = this.calculateWinner.bind(this);
+      this.new_round = this.new_round.bind(this);
+      this.gameMenu = this.gameMenu.bind(this);
+      this.handleClick = this.handleClick.bind(this);
+      this.GameEnd = this.GameEnd.bind(this);
+      this.leave_game = this.leave_game.bind(this);
+      
     }
 
     handleSuccessfulCreated(e) {
@@ -79,10 +93,7 @@ export default class WithOnlinePlayer extends Component {
         return axios
       .put(API_URL+"channel/join/"+channel,data,header)
       .then(response => {
-        console.log('handleSuccessfulJoined',response);
         var resData = response.data.message;
-        console.log('resData.channel',resData.channel);
-        console.log('resData.opponent',resData.opponent);
         this.setState({
           inGame:true,
           isOwner: false,
@@ -131,13 +142,60 @@ export default class WithOnlinePlayer extends Component {
 
     handleMoveEvent(square,piece){
       const squares = this.state.squares.slice();
-      squares[square] = piece;
+      squares[square.move] = piece;
       this.setState({
         squares: squares,
         myMove:true,
         isListen:false
       });
-    
+      if(square.end_round){
+        if(square.end_round === 'gameOver'){
+         var tie_game = this.state.tie+1; 
+          this.setState({
+            tie:tie_game,
+            myMove:false,
+            end_gameNotif:true
+          });
+        }
+        else{
+          var oppScore = this.state.opponentScore+1; 
+          this.setState({
+            opponentScore:oppScore,
+            myMove:false,
+            end_gameNotif:true
+          });
+        }
+    }  
+
+  }
+
+  GameEnd(){
+    this.setState({
+      end_gameNotif:true
+    })
+  }
+
+  new_round = e =>{
+    var newPiece = this.state.piece === 'X' ? '0' : 'X';
+    var myMove_ = newPiece === 'X' ? true : false;
+    var newRound = this.state.round+1; 
+    this.setState({
+        squares: Array(9).fill(null),
+        piece: newPiece,
+        round: newRound,
+        end_gameNotif:false,
+        myMove:myMove_,
+    })
+  }
+  leave_game = e =>{
+      alert('Game leaved');
+      this.setState({
+        squares: Array(9).fill(null),
+        piece: 'p',
+        round: 0,
+        end_gameNotif:false,
+        myMove: false,
+    })
   }
 
   handleClick = e => {
@@ -147,14 +205,36 @@ export default class WithOnlinePlayer extends Component {
       this.setState({
         squares: squares,
         myMove:false
-      });
-      this.sendMove(e);
+      }); 
+      
+      var winner = this.calculateWinner(squares);
+      var rs={
+        move:e,
+        end_round:winner
+      }
+      this.sendMove(rs);
+      if(winner){
+        if(winner === 'gameOver'){
+         var tie_game = this.state.tie+1; 
+          this.setState({
+            tie:tie_game,
+            end_gameNotif:true
+          });
+        }
+        if(winner === this.state.piece){
+          var myScore_game = this.state.myScore+1; 
+          this.setState({
+            myScore:myScore_game,
+            end_gameNotif:true
+          });
+        }
+    }  
+
     }
   };
     renderComponent(){
         if(this.state.inGame){
-            
-          
+               
           return <Board
                       squares = {this.state.squares}
                       myMove= {this.state.myMove}
@@ -173,7 +253,6 @@ export default class WithOnlinePlayer extends Component {
       var myId = localStorage.getItem('id');
       window.Echo.channel('game.'+channelId)
       .listen('UserConnected',(e)=>{
-        console.log('UserConnected',e.message.original);
           var resData= e.message.original;
           this.setState({
               opponent: resData.data,
@@ -183,11 +262,77 @@ export default class WithOnlinePlayer extends Component {
       })
       .listen('UserMove_'+myId,(e)=>{
           var resData= e.message.original;
-          console.log('UserMove',resData);
           this.handleMoveEvent(resData.data.square,resData.data.piece);
       })
     }
+    calculateWinner(squares) {
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          return squares[a];
+        }
+      }
+      return null;
+  }
 
+  gameMenu(){
+    var oppScore = 'Waiting ...';
+    var oppName = 'Waiting ...' ;
+    var oppPiece = 'Waiting ...';
+      if(this.state.opponent){
+         oppScore = this.state.opponentScore;
+         oppName = this.state.opponent.name;
+         oppPiece = this.state.piece === 'X' ? '0' : 'X';
+      }
+    return <div>
+
+             <div>
+                Opponent: 
+                <div>
+                 {oppName}
+                </div>
+                <div>
+                 {oppPiece}
+                </div>
+                <div>
+                 {oppScore}
+                </div>
+
+              </div>
+              <div>
+                Tie 
+                <div>
+                  {this.state.tie}
+                </div>
+              </div>
+              <div>
+                Me: 
+                <div>
+
+                </div>
+                <div>
+                 {this.state.piece}
+                </div>
+                <div>
+                 {this.state.myScore}
+                </div>
+
+              </div>
+
+           </div>
+            
+
+  }
 
     componentDidMount() {
 
@@ -199,7 +344,6 @@ export default class WithOnlinePlayer extends Component {
     componentDidUpdate(prevProps) {
 
       if(this.state.inGame || this.state.isListen){
-        console.log('this.state.gameData.id',this.state.gameData.id)
         this.liveGame(this.state.gameData.id);
       }   
 
@@ -211,9 +355,14 @@ export default class WithOnlinePlayer extends Component {
         return (
             <div>
               <div>
-                Opponent: {this.state.opponent ? this.state.opponent.name : 'Waiting' }
+                {this.gameMenu()}
               </div>
+              <div>
                 {this.renderComponent()}
+              </div>
+                <div>
+                    <EndGameModal new_round={this.new_round} leave_game={this.leave_game}  show={this.state.end_gameNotif}/>
+                </div>
             </div>
         );
     }
