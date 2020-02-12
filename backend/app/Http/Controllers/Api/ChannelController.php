@@ -18,7 +18,7 @@ class ChannelController extends Controller
      */
     public function channelList()
     {
-        $list = Channel::all();
+        $list = Channel::where('status','opened')->get();
         $rs =[];
         foreach ($list as $key => $value){
             $rs[$key]['id'] = $value->id;
@@ -60,7 +60,7 @@ class ChannelController extends Controller
         $data->joined_user = 0;
         $data->game_id = $request->get('game_id');
         $data->code = $code;
-        $data->status = $request->get('status');
+        $data->status = 'opened';
         $data->save();
        // broadcast(new TestPivateEvent($data, 3))->toOthers();
         $rs =[
@@ -107,6 +107,7 @@ class ChannelController extends Controller
 
         $channel = Channel::findOrFail($channelID);
         $channel->joined_user = auth()->id();
+        $channel->status = 'active';
         $channel->save();
 
         $opponent = User::findOrFail($channel->created_user);

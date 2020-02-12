@@ -152,7 +152,7 @@ export default class App extends Component {
   render() {
     if(this.state.back_response){
      return (
-      <div className='app'>
+      <div className='layout'>
           <div>
           {this.state.auth_block === true ? <Auth 
                                 handleSuccessfulLogin={this.handleSuccessfulLogin}

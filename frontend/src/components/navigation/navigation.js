@@ -39,9 +39,8 @@ let token =  localStorage.getItem('token');
   };
   return (
     <div className="nav-wrapper">
-         {console.log('props.loggedInStat',props.loggedInStatus)}
-         {console.log("props.userdata.name",props.userdata.name)}
-      <div className="left-side">
+
+     {/* <div className="left-side">
         <div  className="nav-link-wrapper">
           <NavLink exact to="/" activeClassName="nav-link-active">
             Home
@@ -52,9 +51,9 @@ let token =  localStorage.getItem('token');
             About
           </NavLink>
         </div>
-      </div>
+      </div> */}
       <div className="right-side">
-  {props.loggedInStatus === true ? (<div><div>{props.userdata.name}</div><a onClick={handleSignOut}>Sign Out</a></div>) : (<a onClick={handleSignIn}>Sign In</a>)}
+          {props.loggedInStatus === true ? (<div><div>{props.userdata.name}</div><a onClick={handleSignOut}>Sign Out</a></div>) : (<a onClick={handleSignIn}>Sign In</a>)}
       </div>
     </div>
   );
