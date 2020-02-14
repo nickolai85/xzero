@@ -1,0 +1,25 @@
+.game-board-wrapper{
+    background-color: cadetblue;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    text-align: center;
+    height: 70%;
+    width: 70%;
+    .board-row{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        .square {
+            background: #fff;
+            border: 1px solid #999;
+            float: left;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: -1px;
+            margin-top: -1px;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+  }
+    }
+}

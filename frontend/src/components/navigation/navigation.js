@@ -39,21 +39,16 @@ let token =  localStorage.getItem('token');
   };
   return (
     <div className="nav-wrapper">
-
-     {/* <div className="left-side">
-        <div  className="nav-link-wrapper">
-          <NavLink exact to="/" activeClassName="nav-link-active">
-            Home
-          </NavLink>
-        </div>
-        <div className="nav-link-wrapper">
-          <NavLink to="/about-me" activeClassName="nav-link-active">
-            About
-          </NavLink>
-        </div>
-      </div> */}
+      <div className="left-side">
+        ZerOX
+      </div>
       <div className="right-side">
-          {props.loggedInStatus === true ? (<div><div>{props.userdata.name}</div><a onClick={handleSignOut}>Sign Out</a></div>) : (<a onClick={handleSignIn}>Sign In</a>)}
+          {props.loggedInStatus === true ? (
+          <div >
+            <div>{props.userdata.name}
+          </div>
+            <a onClick={handleSignOut}>Sign Out</a>
+          </div>) : (<a onClick={handleSignIn}>Sign In</a>)}
       </div>
     </div>
   );

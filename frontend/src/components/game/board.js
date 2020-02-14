@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Square from './square';
 
-export default class componentName extends Component {
+export default class Board extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ export default class componentName extends Component {
     }
     render() {
         return (
-        <div className={this.props.myMove ? 'active_board' : 'disabled_board'}>   
+          <div className="game-board-wrapper `{this.props.myMove ? 'active_board' : 'disabled_board'}`">   
            {console.log('square_props',this.props)}
             <div className="board-row">
             {this.renderSquare(0)}
@@ -47,7 +47,7 @@ export default class componentName extends Component {
               {this.renderSquare(7)}
               {this.renderSquare(8)}
             </div> 
-        </div>
+          </div>
         )
     }
 }

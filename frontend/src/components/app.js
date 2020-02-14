@@ -3,9 +3,6 @@ import { ECHO_SERVER, API_URL} from '../config/env';
 import NavigationContainer from './navigation/navigation';
 import Auth from './pages/auth';
 import axios from "axios";
-import Home from './pages/home';
-import SignIn from './auth/signIn';
-import SignUp from './auth/signUp';
 import Echo from 'laravel-echo';
 import Socketio from 'socket.io-client';
 import {
@@ -13,6 +10,7 @@ import {
   Switch,
   Route
  } from "react-router-dom";
+import Game from './game/game';
  
 export default class App extends Component {
   _isMounted = false;
@@ -74,7 +72,6 @@ export default class App extends Component {
         auth_block: true
       });
     }
-    console.log('open_auth_block', this.state.auth_block)
   }
 
   handleSuccessfulLogin() {
@@ -153,41 +150,44 @@ export default class App extends Component {
     if(this.state.back_response){
      return (
       <div className='layout'>
-          <div>
-          {this.state.auth_block === true ? <Auth 
-                                handleSuccessfulLogin={this.handleSuccessfulLogin}
-                                handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
-                                open_auth_block={this.open_auth_block}/>  :'' }  
-          </div>
-
-        <Router>
-         <div>
-         <NavigationContainer
-              loggedInStatus={this.state.loggedInStatus}
-              handleSuccessfulLogout={this.handleSuccessfulLogout}
+        <NavigationContainer
+          loggedInStatus={this.state.loggedInStatus}
+          handleSuccessfulLogout={this.handleSuccessfulLogout}
+          open_auth_block={this.open_auth_block}
+          userdata={this.state.userdata}
+        />
+        <div className="home-wrapper">
+        {this.state.auth_block === true ? 
+          <Auth 
+              handleSuccessfulLogin={this.handleSuccessfulLogin}
+              handleUnsuccessfulLogin={this.handleUnsuccessfulLogin}
               open_auth_block={this.open_auth_block}
-              userdata={this.state.userdata}
-            />
-           <Switch>
-             <Route exact path = "/"
+          /> 
+            :     
+          <Router>
+              <Switch>
+                <Route exact path = "/"
                   render={props => (
-                    <Home
+                    <Game
                       {...props}
                       loggedInStatus={this.state.loggedInStatus}
                       open_auth_block={this.open_auth_block}
                   />
                 )}   
-             />
-           </Switch>
-         </div>
-       </Router>
-
+                />
+              </Switch>
+          </Router>
+         }
+        </div>
       </div>
     );
     }
     else{
       return(
-          <div> Loader</div>
+        <div className='layout'>
+              <div> Loader</div>
+        </div>
+          
       );
     }
   }

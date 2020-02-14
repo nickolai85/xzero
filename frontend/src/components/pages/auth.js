@@ -12,7 +12,6 @@ export default class Auth extends Component  {
     this.handleUnsuccessfulAuth = this.handleUnsuccessfulAuth.bind(this);
   }
     handleSuccessfulAuth() {
-      console.log('handleSuccessfulAuth');
       this.props.handleSuccessfulLogin();
     }
 

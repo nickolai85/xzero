@@ -8,15 +8,22 @@ html {
   padding: 0;
   box-sizing: inherit;
 }
-
 body {
-  font-family: "Open Sans";
+  margin: 0px;
+  font-family: 'Open Sans', sans-serif;
   color: #808080;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  -webkit-tap-highlight-color: transparent;
-}  
+}
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@import 'variables';
+@import 'navbar';
 @import 'modal';
 @import 'layout';
-@import 'headernavbar';
+@import 'homeWrapper';
+@import 'game';
+@import 'gameInfo';
+@import 'board';
+

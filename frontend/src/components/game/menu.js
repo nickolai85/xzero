@@ -38,7 +38,7 @@ export default props => (
             id='online' onClick={props.selectOpponent}
             className={props.gameVs === 'online' ? "active-pc-button" : "deactived-online-button"}
         >
-            Online  player
+            OnlineS  player
         </div>
         
     </div>

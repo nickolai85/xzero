@@ -1,0 +1,14 @@
+.game-info-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: aquamarine;
+    .game-info-left{
+        text-align: center;
+    }
+    .game-info-center{
+        text-align: center;
+    }
+    .game-info-right{
+        text-align: center;
+    }
+}
