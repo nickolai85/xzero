@@ -83,3 +83,15 @@ frontend/yarn-error.log
 frontend/dist/
 frontend/env.js
 frontend/src/config/env.js
+
+#redux_frontend
+/redux_frontend/package-lock.json
+# nodejs
+redux_frontend/node_modules/
+redux_frontend/npm-debug.log
+redux_frontend/yarn-error.log
+
+# project
+redux_frontend/dist/
+redux_frontend/env.js
+redux_frontend/src/config/env.js
